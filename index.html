@@ -89,7 +89,7 @@
             </header>
             
             <div class="filter-bar">
-                <input type="text" id="vocab-search" placeholder="Tìm bằng Hán tự, Pinyin, nghĩa, cấu trúc, bộ thủ...">
+                <input type="text" id="vocab-search" placeholder="Tìm kiếm toàn bộ các trường (Hán tự, Bộ thủ, Tag, Ví dụ, Ghi chú...)">
                 <select id="vocab-filter-lesson">
                     <option value="all">Tất cả bài học</option>
                     <option value="Bài 1">Bài 1</option>
@@ -105,54 +105,63 @@
                     <form id="vocab-form">
                         <input type="hidden" id="vocab-id">
                         
-                        <div class="form-grid">
+                        <div class="form-row">
                             <div class="form-group">
-                                <label for="v-hanzi">Chữ Hán (Hanzi) *</label>
-                                <input type="text" id="v-hanzi" required placeholder="Ví dụ: 📚">
+                                <label for="vocab-hanzi">Chữ Hán (Hanzi) *</label>
+                                <input type="text" id="vocab-hanzi" required placeholder="Ví dụ: 猫">
                             </div>
                             <div class="form-group">
-                                <label for="v-pinyin">Phiên âm (Pinyin) *</label>
-                                <input type="text" id="v-pinyin" required placeholder="Ví dụ: xuéxí">
-                            </div>
-                            <div class="form-group">
-                                <label for="v-meaning">Nghĩa tiếng Việt *</label>
-                                <input type="text" id="v-meaning" required placeholder="Ví dụ: Học tập">
-                            </div>
-                            <div class="form-group">
-                                <label for="v-hsk">Cấp độ HSK</label>
-                                <input type="text" id="v-hsk" placeholder="Ví dụ: HSK 1">
-                            </div>
-                            <div class="form-group">
-                                <label for="v-lesson">Bài học (Lesson)</label>
-                                <input type="text" id="v-lesson" placeholder="Ví dụ: Bài 1">
-                            </div>
-                            <div class="form-group">
-                                <label for="v-pos">Từ loại (POS)</label>
-                                <input type="text" id="v-pos" placeholder="Ví dụ: Động từ">
-                            </div>
-                            <div class="form-group">
-                                <label for="v-radical">Bộ thủ (Radical)</label>
-                                <input type="text" id="v-radical" placeholder="Ví dụ: 子 (Tử)">
-                            </div>
-                            <div class="form-group">
-                                <label for="v-structure">Cấu trúc chữ (Structure)</label>
-                                <input type="text" id="v-structure" placeholder="Ví dụ: Trên dưới">
+                                <label for="vocab-pinyin">Bính âm (Pinyin) *</label>
+                                <input type="text" id="vocab-pinyin" required placeholder="Ví dụ: māo">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="v-example">Câu ví dụ (Example)</label>
-                            <input type="text" id="v-example" placeholder="Ví dụ: 我学习汉语。">
+                            <label for="vocab-meaning">Ý nghĩa (Tiếng Việt) *</label>
+                            <input type="text" id="vocab-meaning" required placeholder="Ví dụ: Con mèo">
                         </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="vocab-hsk">Cấp độ HSK</label>
+                                <input type="text" id="vocab-hsk" placeholder="Ví dụ: HSK 1">
+                            </div>
+                            <div class="form-group">
+                                <label for="vocab-lesson">Bài học (Lesson)</label>
+                                <input type="text" id="vocab-lesson" placeholder="Ví dụ: Bài 3">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="vocab-pos">Từ loại (POS)</label>
+                                <input type="text" id="vocab-pos" placeholder="Ví dụ: Danh từ">
+                            </div>
+                            <div class="form-group">
+                                <label for="vocab-radical">Bộ thủ (Radical)</label>
+                                <input type="text" id="vocab-radical" placeholder="Ví dụ: 犭 (Khuyển)">
+                            </div>
+                            <div class="form-group">
+                                <label for="vocab-structure">Cấu trúc chữ</label>
+                                <input type="text" id="vocab-structure" placeholder="Ví dụ: Tả hữu">
+                            </div>
+                        </div>
+
                         <div class="form-group">
-                            <label for="v-tags">Thẻ phân tách bằng dấu phẩy (Tags)</label>
-                            <input type="text" id="v-tags" placeholder="Ví dụ: dongtu, canthiet">
+                            <label for="vocab-example">Câu ví dụ (Example)</label>
+                            <input type="text" id="vocab-example" placeholder="Ví dụ: 我家有一 rescue 猫。">
                         </div>
+
                         <div class="form-group">
-                            <label for="v-notes">Ghi chú thêm (Notes)</label>
-                            <textarea id="v-notes" rows="3" placeholder="Mẹo nhớ chữ, biến điệu..."></textarea>
+                            <label for="vocab-tags">Thẻ / Tags (cách nhau bằng dấu phẩy)</label>
+                            <input type="text" id="vocab-tags" placeholder="dongvat, thucung, hsk1">
                         </div>
-                        
+
+                        <div class="form-group">
+                            <label for="vocab-notes">Ghi chú thêm (Notes)</label>
+                            <textarea id="vocab-notes" rows="3" placeholder="Mẹo nhớ hoặc cách dùng đặc biệt..."></textarea>
+                        </div>
+
                         <button type="submit" class="btn btn-primary btn-full">Lưu từ vựng</button>
                     </form>
                 </div>
@@ -164,7 +173,7 @@
                         <tr>
                             <th>Chữ Hán (Bộ/Cấu trúc)</th>
                             <th>Pinyin / Từ loại</th>
-                            <th>Nghĩa Việt</th>
+                            <th>Nghĩa Việt / Thẻ</th>
                             <th>Bài học / HSK</th>
                             <th>Lịch ôn kế tiếp (Số lần ôn)</th>
                             <th>Hành động</th>
@@ -181,13 +190,10 @@
                 <h1>Cấu trúc Ngữ pháp</h1>
                 <p>Nắm vững các cấu trúc câu Tiếng Trung cốt lõi.</p>
             </header>
-
             <div class="filter-bar">
                 <input type="text" id="grammar-search" placeholder="Tìm kiếm mẫu ngữ pháp hoặc giải thích...">
             </div>
-
-            <div id="grammar-list" class="grammar-grid">
-                </div>
+            <div id="grammar-list" class="grammar-grid"></div>
         </section>
 
         <section id="flashcards" class="page-view">
@@ -230,20 +236,16 @@
                 <h1>Trắc nghiệm Đánh giá</h1>
                 <p>Kiểm tra ngẫu nhiên vốn từ vựng HSK của bạn.</p>
             </header>
-
             <div id="quiz-start-screen" class="quiz-box text-center">
                 <h3>Sẵn sàng kiểm tra chưa?</h3>
-                <p>Hệ thống sẽ tạo 5 câu hỏi ngẫu nhiên dựa trên bộ từ vựng.</p>
+                <p>Hệ thống sẽ tạo 5 câu hỏi ngẫu nhiên dựa trên bộ từ vựng hiện có.</p>
                 <button class="btn btn-primary" id="btn-start-quiz">Bắt đầu kiểm tra</button>
             </div>
-
             <div id="quiz-play-screen" class="quiz-box" style="display: none;">
                 <div class="quiz-progress">Câu hỏi <span id="quiz-current">1</span>/5</div>
                 <div class="quiz-question" id="quiz-question-text">Câu hỏi ở đây</div>
-                <div class="quiz-options" id="quiz-options-container">
-                    </div>
+                <div class="quiz-options" id="quiz-options-container"></div>
             </div>
-
             <div id="quiz-result-screen" class="quiz-box text-center" style="display: none;">
                 <h2>Kết quả của bạn 🎉</h2>
                 <div class="quiz-score" id="quiz-score-text">0 / 0</div>
@@ -259,7 +261,6 @@
                 </div>
                 <button class="btn btn-primary" id="btn-add-note">+ Thêm ghi chú</button>
             </header>
-
             <div class="filter-bar">
                 <input type="text" id="note-search" placeholder="Tìm kiếm tiêu đề, nội dung hoặc thẻ...">
             </div>
@@ -272,25 +273,22 @@
                         <input type="hidden" id="note-id">
                         <div class="form-group">
                             <label for="note-title">Tiêu đề</label>
-                            <input type="text" id="note-title" required placeholder="Ví dụ: Phân biệt 的, 得, 地">
+                            <input type="text" id="note-title" required>
                         </div>
                         <div class="form-group">
                             <label for="note-tags">Thẻ (phân cách bằng dấu phẩy)</label>
-                            <input type="text" id="note-tags" placeholder="nguphap, canthiet, hsk3">
+                            <input type="text" id="note-tags">
                         </div>
                         <div class="form-group">
                             <label for="note-content">Nội dung</label>
-                            <textarea id="note-content" rows="6" required placeholder="Viết nội dung ghi nhớ của bạn tại đây..."></textarea>
+                            <textarea id="note-content" rows="6" required></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary">Lưu ghi chú</button>
                     </form>
                 </div>
             </div>
-
-            <div id="notes-grid" class="notes-grid">
-                </div>
+            <div id="notes-grid" class="notes-grid"></div>
         </section>
-
     </main>
 
     <script src="script.js"></script>
