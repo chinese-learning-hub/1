@@ -1,53 +1,40 @@
-// --- SAMPLE INITIAL DATA ---
-const vocabularyData = [
-  {
-    id: 1,
-    hanzi: "觉得",
-    pinyin: "juéde",
-    meaning: "cảm thấy",
-    hsk: 3,
-    lesson: 1,
-    pos: "Động từ",
-    radical: "觉",
-    structure: "Trên-dưới",
-    example: "我觉得这个电影很好看。",
-    tags: ["cảm xúc", "giao tiếp"],
-    notes: "Thường dùng để nêu ý kiến cá nhân",
-    learned: false,
-    favorite: false
-  },
-  {
-    id: 2,
-    hanzi: "机会",
-    pinyin: "jīhuì",
-    meaning: "cơ hội",
-    hsk: 4,
-    lesson: 1,
-    pos: "Danh từ",
-    radical: "隹",
-    structure: "Trái-phải",
-    example: "这是一个很好的机会。",
-    tags: ["công việc", "cuộc sống"],
-    notes: "",
-    learned: false,
-    favorite: false
-  },
-  {
-    id: 3,
-    hanzi: "越来越",
-    pinyin: "yuèláiyuè",
-    meaning: "càng ngày càng",
-    hsk: 4,
-    lesson: 2,
-    pos: "Cấu trúc",
-    radical: "",
-    structure: "",
-    example: "天气越来越热了。",
-    tags: ["ngữ pháp"],
-    notes: "Thường đi cùng tính từ hoặc động từ",
-    learned: false,
-    favorite: false
-  }
+// --- SAMPLE UPGRADED DATA SCHEMA ---
+const sampleVocabulary = [
+    { 
+        id: 1, hanzi: "你好", pinyin: "nǐ hǎo", meaning: "Chào bạn", hsk: "HSK 1", lesson: "Bài 1", 
+        pos: "Thán từ", radical: "亻 (Nhân)", structure: "Tả hữu (左右)", 
+        example: "你好！很高兴认识你。", tags: ["giao tiep", "co ban"], notes: "Từ vựng bắt đầu", 
+        learned: true, favorite: false,
+        nextReview: new Date().toISOString(), reviewCount: 2, createdAt: "2026-01-01T00:00:00.000Z"
+    },
+    { 
+        id: 2, hanzi: "谢谢", pinyin: "xièxie", meaning: "Cảm ơn", hsk: "HSK 1", lesson: "Bài 1", 
+        pos: "Động từ", radical: "讠 (Ngôn)", structure: "Tả hữu (左右)", 
+        example: "谢谢你的 giúp đỡ。", tags: ["giao tiep"], notes: "Âm thanh nhẹ ở từ sau", 
+        learned: true, favorite: true,
+        nextReview: new Date().toISOString(), reviewCount: 5, createdAt: "2026-01-02T00:00:00.000Z"
+    },
+    { 
+        id: 3, hanzi: "苹果", pinyin: "píngguǒ", meaning: "Quả táo", hsk: "HSK 1", lesson: "Bài 2", 
+        pos: "Danh từ", radical: "艹 (Thảo) / 木 (Mộc)", structure: "Trên dưới (上下)", 
+        example: "我想吃一个苹果。", tags: ["hoa qua", "danh tu"], notes: "Phân biệt với Bính quả", 
+        learned: false, favorite: false,
+        nextReview: new Date().toISOString(), reviewCount: 0, createdAt: "2026-01-05T00:00:00.000Z"
+    },
+    { 
+        id: 4, hanzi: "看书", pinyin: "kàn shū", meaning: "Đọc sách", hsk: "HSK 1", lesson: "Bài 2", 
+        pos: "Động từ ly hợp", radical: "目 (Mục) / 乛 (Phiệt)", structure: "Kết hợp", 
+        example: "他在房间里看书。", tags: ["hanh dong"], notes: "Xem/Đọc + Sách", 
+        learned: false, favorite: false,
+        nextReview: new Date().toISOString(), reviewCount: 0, createdAt: "2026-01-06T00:00:00.000Z"
+    },
+    { 
+        id: 5, hanzi: "高兴", pinyin: "gāoxìng", meaning: "Vui vẻ, mừng rỡ", hsk: "HSK 1", lesson: "Bài 3", 
+        pos: "Tính từ", radical: "高 (Cao) / 八 (Bát)", structure: "Phức tạp", 
+        example: "认识你很高兴。", tags: ["cam xuc"], notes: "Trạng thái tâm lý vui tươi", 
+        learned: false, favorite: true,
+        nextReview: new Date().toISOString(), reviewCount: 1, createdAt: "2026-01-10T00:00:00.000Z"
+    }
 ];
 
 const sampleGrammar = [
@@ -56,36 +43,32 @@ const sampleGrammar = [
         pattern: "Subject + 是 + Object",
         explanation: "Dùng để khẳng định cái gì là cái gì (tương tự 'to be' trong tiếng Anh).",
         examples: [
-            { zh: "我是越南人。", py: "Wǒ shì Yuènán rén.", vi: "Tôi là người Việt Nam." },
-            { zh: "他是我的老师。", py: "Tā shì wǒ de lǎoshī.", vi: "Thầy ấy là giáo viên của tôi." }
+            { zh: "我是越南人。", py: "Wǒ ...", vi: "Tôi là người Việt Nam." }
         ],
         bookmarked: true
-    },
-    {
-        id: 2,
-        pattern: "Subject + 太 + Adj + 了",
-        explanation: "Biểu thị mức độ cao hoặc cảm thán (Quá, lắm...).",
-        examples: [
-            { zh: "太好了！", py: "Tài hǎo le!", vi: "Quá tốt rồi / Tuyệt quá!" },
-            { zh: "这个苹果太大了。", py: "Zhège píngguǒ tài dà le.", vi: "Quả táo này to quá." }
-        ],
-        bookmarked: false
     }
 ];
 
-// --- APP STATE INITIALIZATION ---
+// --- APP STATE ---
 let vocabulary = JSON.parse(localStorage.getItem('zh_vocab')) || sampleVocabulary;
 let grammar = JSON.parse(localStorage.getItem('zh_grammar')) || sampleGrammar;
 let notes = JSON.parse(localStorage.getItem('zh_notes')) || [];
 let stats = JSON.parse(localStorage.getItem('zh_stats')) || {
     streak: 1,
     lastStudyDate: new Date().toDateString(),
-    vocabLearnedToday: 2,
+    vocabLearnedToday: 0,
     cardsReviewedToday: 0,
-    grammarStudiedToday: 1
+    grammarStudiedToday: 0
 };
 
-// Save helper
+// Luôn đảm bảo thuộc tính mới tồn tại nếu được kế thừa từ phiên bản cũ
+vocabulary = vocabulary.map(word => ({
+    ...word,
+    createdAt: word.createdAt || new Date().toISOString(),
+    reviewCount: word.reviewCount !== undefined ? word.reviewCount : (word.learned ? 1 : 0),
+    nextReview: word.nextReview || new Date().toISOString()
+}));
+
 function saveToStorage() {
     localStorage.setItem('zh_vocab', JSON.stringify(vocabulary));
     localStorage.setItem('zh_grammar', JSON.stringify(grammar));
@@ -97,8 +80,7 @@ function saveToStorage() {
 document.querySelectorAll('.nav-item').forEach(item => {
     item.addEventListener('click', (e) => {
         e.preventDefault();
-        const target = item.getAttribute('data-target');
-        navigateTo(target);
+        navigateTo(item.getAttribute('data-target'));
     });
 });
 
@@ -112,7 +94,6 @@ function navigateTo(targetPageId) {
     const targetPage = document.getElementById(targetPageId);
     if (targetPage) targetPage.classList.add('active');
 
-    // Context execution upon loading page
     if (targetPageId === 'dashboard') updateDashboard();
     if (targetPageId === 'vocabulary') renderVocabulary();
     if (targetPageId === 'grammar') renderGrammar();
@@ -121,23 +102,20 @@ function navigateTo(targetPageId) {
     if (targetPageId === 'notebook') renderNotes();
 }
 
-// --- DASHBOARD CONTROLLER ---
+// --- DASHBOARD ---
 function updateDashboard() {
-    // Check Streak
     const today = new Date().toDateString();
     if (stats.lastStudyDate !== today) {
         const yesterday = new Date();
         yesterday.setDate(yesterday.getDate() - 1);
         if (stats.lastStudyDate === yesterday.toDateString()) {
-            // Consecutive day
-            stats.streak += 0; // maintain until action resets it, or increment on dynamic interaction
+            // Giữ vững chuỗi
         } else {
-            // Streak broken if expired past a whole day without loading or resetting
+            stats.streak = 1; // reset chuỗi nếu đứt quãng quá 1 ngày
         }
-        // Reset daily tallies if new calendar day
-        stats.vocabLearnedToday = vocabulary.filter(v => v.learned).length; // simple approximation
+        stats.vocabLearnedToday = 0;
         stats.cardsReviewedToday = 0;
-        stats.grammarStudiedToday = grammar.filter(g => g.bookmarked).length;
+        stats.grammarStudiedToday = 0;
         stats.lastStudyDate = today;
         saveToStorage();
     }
@@ -148,7 +126,7 @@ function updateDashboard() {
     document.getElementById('stat-grammar-today').innerText = stats.grammarStudiedToday;
 }
 
-// --- VOCABULARY CONTROLLER ---
+// --- VOCABULARY CONTROLLER (UPDATED FOR MATRIX VIEW) ---
 const vocabSearch = document.getElementById('vocab-search');
 const vocabFilterLesson = document.getElementById('vocab-filter-lesson');
 
@@ -157,25 +135,55 @@ if (vocabFilterLesson) vocabFilterLesson.addEventListener('change', renderVocabu
 
 function renderVocabulary() {
     const tbody = document.getElementById('vocab-list');
+    if (!tbody) return;
     tbody.innerHTML = '';
     const query = vocabSearch.value.toLowerCase();
     const lessonFilter = vocabFilterLesson.value;
 
     vocabulary.forEach(word => {
-        const matchesSearch = word.hanzi.includes(query) || word.pinyin.toLowerCase().includes(query) || word.meaning.toLowerCase().includes(query);
+        const matchesSearch = 
+            word.hanzi.includes(query) || 
+            word.pinyin.toLowerCase().includes(query) || 
+            word.meaning.toLowerCase().includes(query) ||
+            (word.radical && word.radical.toLowerCase().includes(query)) ||
+            (word.pos && word.pos.toLowerCase().includes(query));
+            
         const matchesLesson = lessonFilter === 'all' || word.lesson === lessonFilter;
 
         if (matchesSearch && matchesLesson) {
             const tr = document.createElement('tr');
+            
+            // Format ngày ôn tập kế tiếp để hiển thị thân thiện
+            const nextReviewDate = new Date(word.nextReview);
+            const isOverdue = nextReviewDate <= new Date();
+            const timeString = isOverdue ? "🔥 Cần ôn ngay" : nextReviewDate.toLocaleDateString('vi-VN');
+
             tr.innerHTML = `
-                <td class="hanzi-text">${word.hanzi}</td>
-                <td>${word.pinyin}</td>
-                <td>${word.meaning}</td>
-                <td><span class="badge badge-lesson">${word.lesson}</span></td>
                 <td>
-                    <span class="badge ${word.learned ? 'badge-status' : 'badge-unlearned'}">
-                        ${word.learned ? 'Đã thuộc' : 'Chưa thuộc'}
-                    </span>
+                    <div class="hanzi-container">
+                        <span class="hanzi-text">${word.hanzi}</span>
+                        <span class="sub-info">Bộ: ${word.radical || 'Chưa cập nhật'} | ${word.structure || ''}</span>
+                    </div>
+                </td>
+                <td>
+                    <div><strong>${word.pinyin}</strong></div>
+                    <div style="font-size:0.8rem; color:var(--text-secondary)">${word.pos || 'Từ loại'}</div>
+                </td>
+                <td>
+                    <div>${word.meaning}</div>
+                    <div style="font-size:0.75rem; color:blue; max-width:200px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">
+                        Ex: ${word.example || ''}
+                    </div>
+                </td>
+                <td>
+                    <span class="badge badge-lesson">${word.lesson}</span>
+                    <span class="badge badge-hsk">${word.hsk || 'HSK'}</span>
+                </td>
+                <td>
+                    <div class="review-info" style="color: ${isOverdue ? '#ea2b2b' : 'var(--text-primary)'}">
+                        ${timeString}
+                    </div>
+                    <div style="font-size:0.75rem; color:var(--text-secondary)">Đã ôn: ${word.reviewCount} lần</div>
                 </td>
                 <td>
                     <button class="action-btn" onclick="toggleFavoriteVocab(${word.id})">${word.favorite ? '⭐' : '☆'}</button>
@@ -200,7 +208,14 @@ window.toggleLearnedVocab = function(id) {
     const word = vocabulary.find(v => v.id === id);
     if (word) {
         word.learned = !word.learned;
-        if (word.learned) stats.vocabLearnedToday++;
+        if (word.learned) {
+            stats.vocabLearnedToday++;
+            word.reviewCount = 1;
+            word.nextReview = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(); // Ngày mai ôn tiếp
+        } else {
+            word.reviewCount = 0;
+            word.nextReview = new Date().toISOString();
+        }
         saveToStorage();
         renderVocabulary();
     }
@@ -212,6 +227,7 @@ if (grammarSearch) grammarSearch.addEventListener('input', renderGrammar);
 
 function renderGrammar() {
     const container = document.getElementById('grammar-list');
+    if(!container) return;
     container.innerHTML = '';
     const query = grammarSearch.value.toLowerCase();
 
@@ -237,9 +253,7 @@ function renderGrammar() {
                     <button class="action-btn" onclick="toggleBookmarkGrammar(${item.id})">${item.bookmarked ? '🔖' : '📑'}</button>
                 </div>
                 <div class="grammar-explanation">${item.explanation}</div>
-                <div class="grammar-examples">
-                    ${examplesHTML}
-                </div>
+                <div class="grammar-examples">${examplesHTML}</div>
             `;
             container.appendChild(card);
         }
@@ -256,7 +270,7 @@ window.toggleBookmarkGrammar = function(id) {
     }
 }
 
-// --- FLASHCARDS CONTROLLER ---
+// --- FLASHCARDS SRS CONTROLLER (UPDATED ARGS & LOGIC) ---
 let activeDeck = [];
 let currentCardIndex = 0;
 
@@ -269,7 +283,8 @@ if (cardElement) {
 }
 
 function initFlashcards() {
-    activeDeck = [...vocabulary];
+    // Sắp xếp ưu tiên các từ đến lịch ôn tập trước (nextReview nhỏ hơn hiện tại)
+    activeDeck = [...vocabulary].sort((a, b) => new Date(a.nextReview) - new Date(b.nextReview));
     currentCardIndex = 0;
     showCard();
 }
@@ -277,8 +292,10 @@ function initFlashcards() {
 function showCard() {
     if (activeDeck.length === 0) {
         document.getElementById('card-front-text').innerText = "Trống";
+        document.getElementById('card-front-details').innerText = "";
         document.getElementById('card-back-pinyin').innerText = "";
-        document.getElementById('card-back-meaning').innerText = "Hãy thêm từ vựng để học.";
+        document.getElementById('card-back-meaning').innerText = "Hãy bổ sung từ vựng.";
+        document.getElementById('card-back-example').innerText = "";
         return;
     }
     cardElement.classList.remove('flipped');
@@ -286,8 +303,10 @@ function showCard() {
 
     const currentCard = activeDeck[currentCardIndex];
     document.getElementById('card-front-text').innerText = currentCard.hanzi;
+    document.getElementById('card-front-details').innerText = `Bộ thủ: ${currentCard.radical || 'Không'} | Loại từ: ${currentCard.pos || 'N/A'}`;
     document.getElementById('card-back-pinyin').innerText = currentCard.pinyin;
     document.getElementById('card-back-meaning').innerText = currentCard.meaning;
+    document.getElementById('card-back-example').innerText = currentCard.example ? `Ví dụ: ${currentCard.example}` : "Không có ví dụ";
 }
 
 document.getElementById('btn-next')?.addEventListener('click', () => {
@@ -309,19 +328,54 @@ document.getElementById('btn-shuffle')?.addEventListener('click', () => {
     showCard();
 });
 
-document.querySelectorAll('.smr-btn').forEach(btn => {
+// Xử lý sự kiện nhấn nút SRS tương ứng mức độ nhớ (1: Học lại, 2: Khó, 3: Tốt, 4: Dễ)
+document.querySelectorAll('.smr-box, .smr-buttons .btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
-        e.stopPropagation(); // Avoid re-flipping card
+        e.stopPropagation();
+        if (activeDeck.length === 0) return;
+
+        const score = parseInt(btn.getAttribute('data-score'));
+        if (!score) return;
+
+        const currentCard = activeDeck[currentCardIndex];
+        
+        // Cập nhật thống kê hệ thống toàn cục
         stats.cardsReviewedToday++;
+        
+        // Tiến hành cập nhật tiến trình SRS cho từ vựng thực tế trong mảng gốc
+        const mainVocabItem = vocabulary.find(v => v.id === currentCard.id);
+        if (mainVocabItem) {
+            mainVocabItem.reviewCount += 1;
+            mainVocabItem.learned = score > 1; // Nếu bấm Khó trở lên xem như đã tiếp thu sơ bộ
+
+            // Thuật toán kéo giãn chu kỳ ôn tập (SRS đơn giản hóa)
+            let daysToAdd = 1;
+            if (score === 2) daysToAdd = 2 * mainVocabItem.reviewCount;
+            if (score === 3) daysToAdd = 4 * mainVocabItem.reviewCount;
+            if (score === 4) daysToAdd = 7 * mainVocabItem.reviewCount;
+            
+            if (score === 1) {
+                // Nếu quên hoàn toàn, đặt lịch ôn tập lại sau 10 phút (0.007 ngày)
+                mainVocabItem.nextReview = new Date(Date.now() + 10 * 60 * 1000).toISOString();
+            } else {
+                mainVocabItem.nextReview = new Date(Date.now() + daysToAdd * 24 * 60 * 60 * 1000).toISOString();
+            }
+        }
+        
+        // Tăng chuỗi học tập (Streak) linh hoạt khi ôn tập tích cực ngày hôm nay
+        if (stats.vocabLearnedToday === 0 && stats.cardsReviewedToday === 1) {
+            stats.streak += 1;
+        }
+
         saveToStorage();
         
-        // Advance automatically
+        // Chuyển sang thẻ tiếp theo
         currentCardIndex = (currentCardIndex + 1) % activeDeck.length;
         showCard();
     });
 });
 
-// --- QUIZ CONTROLLER ---
+// --- QUIZ ---
 let quizQuestions = [];
 let currentQuizIdx = 0;
 let quizScore = 0;
@@ -337,27 +391,22 @@ function resetQuizUI() {
 
 function startQuiz() {
     if (vocabulary.length < 4) {
-        alert("Bạn cần có ít nhất 4 từ vựng trong kho dữ liệu để làm trắc nghiệm!");
+        alert("Bạn cần có ít nhất 4 từ vựng để tạo bài trắc nghiệm!");
         return;
     }
-    
     quizScore = 0;
     currentQuizIdx = 0;
     quizQuestions = generateQuizQuestions();
-    
     document.getElementById('quiz-start-screen').style.display = 'none';
     document.getElementById('quiz-play-screen').style.display = 'block';
-    
     showQuizQuestion();
 }
 
 function generateQuizQuestions() {
-    // Pick 5 random words
     let shuffled = [...vocabulary].sort(() => Math.random() - 0.5);
     let chosenWords = shuffled.slice(0, Math.min(5, vocabulary.length));
     
     return chosenWords.map(word => {
-        // Construct options: 1 correct + 3 wrong options
         let wrongOptions = vocabulary
             .filter(v => v.id !== word.id)
             .sort(() => Math.random() - 0.5)
@@ -367,7 +416,7 @@ function generateQuizQuestions() {
         let options = [word.meaning, ...wrongOptions].sort(() => Math.random() - 0.5);
         
         return {
-            question: `Ý nghĩa của chữ Hán "${word.hanzi}" (${word.pinyin}) là gì?`,
+            question: `Ý nghĩa của chữ Hán "${word.hanzi}" là gì?`,
             correctAnswer: word.meaning,
             options: options
         };
@@ -392,20 +441,16 @@ function showQuizQuestion() {
 }
 
 function selectOption(selectedBtn, chosenOpt, correctOpt) {
-    // Disable all options
     document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
-    
     if (chosenOpt === correctOpt) {
         selectedBtn.classList.add('correct');
         quizScore++;
     } else {
         selectedBtn.classList.add('wrong');
-        // highlight correct option
         document.querySelectorAll('.option-btn').forEach(b => {
             if (b.innerText === correctOpt) b.classList.add('correct');
         });
     }
-    
     setTimeout(() => {
         currentQuizIdx++;
         if (currentQuizIdx < quizQuestions.length) {
@@ -413,7 +458,7 @@ function selectOption(selectedBtn, chosenOpt, correctOpt) {
         } else {
             showQuizResult();
         }
-    }, 1500);
+    }, 1200);
 }
 
 function showQuizResult() {
@@ -422,7 +467,7 @@ function showQuizResult() {
     document.getElementById('quiz-score-text').innerText = `${quizScore} / ${quizQuestions.length}`;
 }
 
-// --- STUDY NOTEBOOK CONTROLLER ---
+// --- STUDY NOTEBOOK ---
 const noteModal = document.getElementById('note-modal');
 const btnAddNote = document.getElementById('btn-add-note');
 const closeNoteModal = document.getElementById('close-note-modal');
@@ -449,9 +494,7 @@ function openModal(id = null) {
     }
 }
 
-function closeModal() {
-    noteModal.style.display = 'none';
-}
+function closeModal() { noteModal.style.display = 'none'; }
 
 if (noteForm) {
     noteForm.onsubmit = function(e) {
@@ -460,28 +503,15 @@ if (noteForm) {
         const title = document.getElementById('note-title').value;
         const rawTags = document.getElementById('note-tags').value;
         const content = document.getElementById('note-content').value;
-        
         const tags = rawTags.split(',').map(t => t.trim()).filter(t => t.length > 0);
         const dateString = new Date().toLocaleDateString('vi-VN');
 
         if (id) {
-            // Edit mode
             const index = notes.findIndex(n => n.id == id);
-            if (index !== -1) {
-                notes[index] = { ...notes[index], title, tags, content, date: dateString };
-            }
+            if (index !== -1) notes[index] = { ...notes[index], title, tags, content, date: dateString };
         } else {
-            // Creative mode
-            const newNote = {
-                id: Date.now(),
-                title,
-                tags,
-                content,
-                date: dateString
-            };
-            notes.push(newNote);
+            notes.push({ id: Date.now(), title, tags, content, date: dateString });
         }
-        
         saveToStorage();
         closeModal();
         renderNotes();
@@ -490,6 +520,7 @@ if (noteForm) {
 
 function renderNotes() {
     const container = document.getElementById('notes-grid');
+    if(!container) return;
     container.innerHTML = '';
     const query = noteSearch.value.toLowerCase();
 
@@ -501,9 +532,7 @@ function renderNotes() {
         if (matchesQuery) {
             const card = document.createElement('div');
             card.className = 'note-card';
-            
             const tagsHTML = note.tags.map(t => `<span class="tag">#${t}</span>`).join('');
-            
             card.innerHTML = `
                 <div>
                     <div class="note-title">${note.title}</div>
@@ -522,12 +551,12 @@ function renderNotes() {
 }
 
 window.deleteNote = function(id) {
-    if (confirm("Bạn có chắc chắn muốn xóa ghi chú này?")) {
+    if (confirm("Bạn có chắc muốn xóa ghi chú này?")) {
         notes = notes.filter(n => n.id !== id);
         saveToStorage();
         renderNotes();
     }
 }
 
-// Initial Boot Run
+// Khởi chạy ứng dụng ban đầu
 updateDashboard();
