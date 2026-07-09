@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Học Tiếng Trung - TrungViệt Học</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="logo">
+            <span class="logo-icon">🇨🇳</span>
+            <h2>TrungViệt Học</h2>
+        </div>
+        <nav class="nav-menu">
+            <a href="#" class="nav-item active" data-target="dashboard">📊 Tổng quan</a>
+            <a href="#" class="nav-item" data-target="vocabulary">📚 Từ vựng (HSK)</a>
+            <a href="#" class="nav-item" data-target="grammar">📝 Ngữ pháp</a>
+            <a href="#" class="nav-item" data-target="flashcards">🎴 Flashcards</a>
+            <a href="#" class="nav-item" data-target="quiz">✍️ Trắc nghiệm</a>
+            <a href="#" class="nav-item" data-target="notebook">📓 Sổ tay ghi chú</a>
+        </nav>
+        <div class="sidebar-footer">
+            <p>Dự án cá nhân v1.0</p>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        
+        <section id="dashboard" class="page-view active">
+            <header class="page-header">
+                <h1>Chào mừng bạn trở lại! 👋</h1>
+                <p>Hôm nay bạn muốn học gì nào?</p>
+            </header>
+            
+            <div class="streak-banner">
+                <div class="streak-info">
+                    <span class="streak-fire">🔥</span>
+                    <div>
+                        <h3>Chuỗi học tập: <span id="streak-count">0</span> ngày</h3>
+                        <p id="streak-msg">Hãy duy trì ngọn lửa học tập mỗi ngày nhé!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-icon blue">🇨🇳</span>
+                    <div class="stat-details">
+                        <h4 id="stat-vocab-today">0</h4>
+                        <p>Từ vựng đã học hôm nay</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-icon purple">🎴</span>
+                    <div class="stat-details">
+                        <h4 id="stat-cards-today">0</h4>
+                        <p>Thẻ flashcard đã ôn</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-icon green">📝</span>
+                    <div class="stat-details">
+                        <h4 id="stat-grammar-today">0</h4>
+                        <p>Ngữ pháp đã đọc</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-title">Truy cập nhanh</h3>
+            <div class="quick-access">
+                <button class="btn btn-primary" onclick="navigateTo('vocabulary')">Học Từ Mới</button>
+                <button class="btn btn-secondary" onclick="navigateTo('flashcards')">Ôn Flashcards</button>
+                <button class="btn btn-accent" onclick="navigateTo('quiz')">Làm Kiểm Tra</button>
+            </div>
+        </section>
+
+        <section id="vocabulary" class="page-view">
+            <header class="page-header">
+                <h1>Từ vựng HSK</h1>
+                <p>Danh sách từ vựng cá nhân hóa của bạn.</p>
+            </header>
+            
+            <div class="filter-bar">
+                <input type="text" id="vocab-search" placeholder="Tìm kiếm bằng chữ Hán, Pinyin, nghĩa...">
+                <select id="vocab-filter-lesson">
+                    <option value="all">Tất cả bài học</option>
+                    <option value="Bài 1">Bài 1</option>
+                    <option value="Bài 2">Bài 2</option>
+                    <option value="Bài 3">Bài 3</option>
+                </select>
+            </div>
+
+            <div class="vocab-table-container">
+                <table class="vocab-table">
+                    <thead>
+                        <tr>
+                            <th>Chữ Hán</th>
+                            <th>Pinyin</th>
+                            <th>Nghĩa Việt</th>
+                            <th>Bài học</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="vocab-list">
+                        </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="grammar" class="page-view">
+            <header class="page-header">
+                <h1>Cấu trúc Ngữ pháp</h1>
+                <p>Nắm vững các cấu trúc câu Tiếng Trung cốt lõi.</p>
+            </header>
+
+            <div class="filter-bar">
+                <input type="text" id="grammar-search" placeholder="Tìm kiếm mẫu ngữ pháp hoặc giải thích...">
+            </div>
+
+            <div id="grammar-list" class="grammar-grid">
+                </div>
+        </section>
+
+        <section id="flashcards" class="page-view">
+            <header class="page-header">
+                <h1>Ôn tập Flashcards</h1>
+                <p>Hệ thống lặp lại ngắt quãng đơn giản giúp nhớ lâu.</p>
+            </header>
+
+            <div class="flashcard-wrapper">
+                <div class="card-container" id="flashcard">
+                    <div class="card-front">
+                        <div id="card-front-text" class="chinese-text">...</div>
+                        <span class="hint-text">Bấm vào để lật thẻ</span>
+                    </div>
+                    <div class="card-back">
+                        <div id="card-back-pinyin" class="pinyin-text">...</div>
+                        <div id="card-back-meaning" class="meaning-text">...</div>
+                    </div>
+                </div>
+
+                <div class="card-controls">
+                    <button class="btn btn-secondary" id="btn-prev">⬅️ Trước</button>
+                    <button class="btn btn-secondary" id="btn-shuffle">🔀 Trộn thẻ</button>
+                    <button class="btn btn-secondary" id="btn-next">Sau ➡️</button>
+                </div>
+
+                <div class="smr-buttons" id="smr-box" style="display: none;">
+                    <button class="btn smr-btn again" data-score="again">Học lại</button>
+                    <button class="btn smr-btn hard" data-score="hard">Khó</button>
+                    <button class="btn smr-btn good" data-score="good">Tốt</button>
+                    <button class="btn smr-btn easy" data-score="easy">Dễ</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="quiz" class="page-view">
+            <header class="page-header">
+                <h1>Trắc nghiệm Đánh giá</h1>
+                <p>Kiểm tra ngẫu nhiên vốn từ vựng HSK của bạn.</p>
+            </header>
+
+            <div id="quiz-start-screen" class="quiz-box text-center">
+                <h3>Sẵn sàng kiểm tra chưa?</h3>
+                <p>Hệ thống sẽ tạo 5 câu hỏi ngẫu nhiên dựa trên bộ từ vựng.</p>
+                <button class="btn btn-primary" id="btn-start-quiz">Bắt đầu kiểm tra</button>
+            </div>
+
+            <div id="quiz-play-screen" class="quiz-box" style="display: none;">
+                <div class="quiz-progress">Câu hỏi <span id="quiz-current">1</span>/5</div>
+                <div class="quiz-question" id="quiz-question-text">Câu hỏi ở đây</div>
+                <div class="quiz-options" id="quiz-options-container">
+                    </div>
+            </div>
+
+            <div id="quiz-result-screen" class="quiz-box text-center" style="display: none;">
+                <h2>Kết quả của bạn 🎉</h2>
+                <div class="quiz-score" id="quiz-score-text">0 / 0</div>
+                <button class="btn btn-primary" id="btn-restart-quiz">Làm lại bài mới</button>
+            </div>
+        </section>
+
+        <section id="notebook" class="page-view">
+            <header class="page-header flex-header">
+                <div>
+                    <h1>Sổ tay Ghi chú</h1>
+                    <p>Lưu trữ mẹo học tập, nhật ký, hoặc lưu ý riêng của bạn.</p>
+                </div>
+                <button class="btn btn-primary" id="btn-add-note">+ Thêm ghi chú</button>
+            </header>
+
+            <div class="filter-bar">
+                <input type="text" id="note-search" placeholder="Tìm kiếm tiêu đề, nội dung hoặc thẻ...">
+            </div>
+
+            <div id="note-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close-modal" id="close-note-modal">&times;</span>
+                    <h3 id="modal-title-text">Thêm ghi chú mới</h3>
+                    <form id="note-form">
+                        <input type="hidden" id="note-id">
+                        <div class="form-group">
+                            <label for="note-title">Tiêu đề</label>
+                            <input type="text" id="note-title" required placeholder="Ví dụ: Phân biệt 的, 得, 地">
+                        </div>
+                        <div class="form-group">
+                            <label for="note-tags">Thẻ (phân cách bằng dấu phẩy)</label>
+                            <input type="text" id="note-tags" placeholder="nguphap, canthiet, hsk3">
+                        </div>
+                        <div class="form-group">
+                            <label for="note-content">Nội dung</label>
+                            <textarea id="note-content" rows="6" required placeholder="Viết nội dung ghi nhớ của bạn tại đây..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Lưu ghi chú</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="notes-grid" class="notes-grid">
+                </div>
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
