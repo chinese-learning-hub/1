@@ -1,11 +1,53 @@
 // --- SAMPLE INITIAL DATA ---
-const sampleVocabulary = [
-    { id: 1, hanzi: "你好", pinyin: "nǐ hǎo", meaning: "Chào bạn", lesson: "Bài 1", learned: true, favorite: false },
-    { id: 2, hanzi: "谢谢", pinyin: "xièxie", meaning: "Cảm ơn", lesson: "Bài 1", learned: true, favorite: true },
-    { id: 3, hanzi: "苹果", pinyin: "píngguǒ", meaning: "Quả táo", lesson: "Bài 2", learned: false, favorite: false },
-    { id: 4, hanzi: "看书", pinyin: "kàn shū", meaning: "Đọc sách", lesson: "Bài 2", learned: false, favorite: false },
-    { id: 5, hanzi: "高兴", pinyin: "gāoxìng", meaning: "Vui vẻ, mừng rỡ", lesson: "Bài 3", learned: false, favorite: true },
-    { id: 6, hanzi: "医生", pinyin: "yīshēng", meaning: "Bác sĩ", lesson: "Bài 3", learned: false, favorite: false }
+const vocabularyData = [
+  {
+    id: 1,
+    hanzi: "觉得",
+    pinyin: "juéde",
+    meaning: "cảm thấy",
+    hsk: 3,
+    lesson: 1,
+    pos: "Động từ",
+    radical: "觉",
+    structure: "Trên-dưới",
+    example: "我觉得这个电影很好看。",
+    tags: ["cảm xúc", "giao tiếp"],
+    notes: "Thường dùng để nêu ý kiến cá nhân",
+    learned: false,
+    favorite: false
+  },
+  {
+    id: 2,
+    hanzi: "机会",
+    pinyin: "jīhuì",
+    meaning: "cơ hội",
+    hsk: 4,
+    lesson: 1,
+    pos: "Danh từ",
+    radical: "隹",
+    structure: "Trái-phải",
+    example: "这是一个很好的机会。",
+    tags: ["công việc", "cuộc sống"],
+    notes: "",
+    learned: false,
+    favorite: false
+  },
+  {
+    id: 3,
+    hanzi: "越来越",
+    pinyin: "yuèláiyuè",
+    meaning: "càng ngày càng",
+    hsk: 4,
+    lesson: 2,
+    pos: "Cấu trúc",
+    radical: "",
+    structure: "",
+    example: "天气越来越热了。",
+    tags: ["ngữ pháp"],
+    notes: "Thường đi cùng tính từ hoặc động từ",
+    learned: false,
+    favorite: false
+  }
 ];
 
 const sampleGrammar = [
