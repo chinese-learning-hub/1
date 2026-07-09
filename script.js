@@ -2,7 +2,7 @@
 const sampleVocabulary = [
     { 
         id: 1, hanzi: "你好", pinyin: "nǐ hǎo", meaning: "Chào bạn", hsk: "HSK 1", lesson: "Bài 1", 
-        pos: "Thán từ", radical: "Ref (Nhân)", structure: "Tả hữu (左右)", 
+        pos: "Thán từ", radical: "亻 (Nhân)", structure: "Tả hữu (左右)", 
         example: "你好！很高兴认识 du.", tags: ["giao tiep", "co ban"], notes: "Từ bắt đầu cơ bản", 
         learned: true, favorite: false,
         nextReview: new Date().toISOString(), reviewCount: 2, createdAt: "2026-01-01T00:00:00.000Z"
@@ -13,23 +13,34 @@ const sampleVocabulary = [
         example: "谢谢 tu de giúp đỡ.", tags: ["giao tiep"], notes: "Thanh nhẹ ở âm sau", 
         learned: true, favorite: true,
         nextReview: new Date().toISOString(), reviewCount: 5, createdAt: "2026-01-02T00:00:00.000Z"
-    },
-    { 
-        id: 3, hanzi: "苹果", pinyin: "píngguǒ", meaning: "Quả táo", hsk: "HSK 1", lesson: "Bài 2", 
-        pos: "Danh từ", radical: "艹 (Thảo)", structure: "Trên dưới (上下)", 
-        example: "我想吃一个苹果。", tags: ["hoa qua"], notes: "Phân biệt với từ Quả bính", 
-        learned: false, favorite: false,
-        nextReview: new Date().toISOString(), reviewCount: 0, createdAt: "2026-01-05T00:00:00.000Z"
     }
 ];
 
+// Upgraded Schema Sample Dataset
 const sampleGrammar = [
     {
         id: 1,
         pattern: "Subject + 是 + Object",
-        explanation: "Dùng để khẳng định cái gì là cái gì.",
-        examples: [{ zh: "我是越南人。", py: "Wǒ shì Yuènán rén.", vi: "Tôi là người Việt Nam." }],
-        bookmarked: true
+        pinyin: "shì",
+        meaning: "Chủ ngữ là Tân ngữ (Khẳng định định danh)",
+        explanation: "Cấu trúc kinh điển dùng để liên kết hai danh từ, biểu thị mối quan hệ tương đương hoặc thuộc tính.",
+        example: "我是越南人。 (Wǒ shì Yuènán rén. - Tôi là người Việt Nam.)",
+        hsk: "HSK 1",
+        lesson: "Bài 1",
+        notes: "Thể phủ định thêm '不' (bù) thành '不是' (bú shì).",
+        createdAt: "2026-01-01T08:00:00.000Z"
+    },
+    {
+        id: 2,
+        pattern: "Subject + 也很 + Adjective",
+        pinyin: "yě hěn",
+        meaning: "Chủ ngữ cũng rất...",
+        explanation: "Phó từ '也' đứng trước phó từ chỉ mức độ '很' để diễn tả trạng thái tương đồng với đối tượng trước đó.",
+        example: " order 也很忙。 (Wǒ yě hěn máng. - Tôi cũng rất bận.)",
+        hsk: "HSK 1",
+        lesson: "Bài 2",
+        notes: "Tuyệt đối không đảo vị trí thành '很也'.",
+        createdAt: "2026-01-03T10:30:00.000Z"
     }
 ];
 
@@ -151,7 +162,6 @@ if (vocabForm) {
         const tags = rawTags.split(',').map(t => t.trim()).filter(t => t.length > 0);
 
         if (id) {
-            // Cập nhật cấu trúc từ vựng cũ
             const index = vocabulary.findIndex(v => v.id == id);
             if (index !== -1) {
                 vocabulary[index] = { 
@@ -160,7 +170,6 @@ if (vocabForm) {
                 };
             }
         } else {
-            // Thêm từ vựng mới hoàn toàn + tích hợp SRS ẩn
             vocabulary.push({
                 id: Date.now(), hanzi, pinyin, meaning, hsk, lesson, 
                 pos, radical, structure, example, tags, notes: notesText,
@@ -175,14 +184,13 @@ if (vocabForm) {
 }
 
 window.deleteVocab = function(id) {
-    if (confirm("Bạn có chắc chắn muốn xóa hẳn từ vựng này khỏi hệ thống?")) {
+    if (confirm("Bạn có chắc chắn muốn xóa hẳn từ vựng này?")) {
         vocabulary = vocabulary.filter(v => v.id !== id);
         saveToStorage();
         renderVocabulary();
     }
 }
 
-// --- SEARCH ENGINE ALL FIELDS ---
 function renderVocabulary() {
     const tbody = document.getElementById('vocab-list');
     if (!tbody) return;
@@ -191,7 +199,6 @@ function renderVocabulary() {
     const lessonFilter = vocabFilterLesson.value;
 
     vocabulary.forEach(word => {
-        // Quét tìm kiếm thông minh trên cả 11 trường dữ liệu của Schema
         const matchAllFields = 
             word.hanzi.includes(query) || 
             word.pinyin.toLowerCase().includes(query) || 
@@ -253,39 +260,158 @@ window.toggleFavoriteVocab = function(id) {
     if (word) { word.favorite = !word.favorite; saveToStorage(); renderVocabulary(); }
 }
 
-window.toggleLearnedVocab = function(id) {
-    const word = vocabulary.find(v => v.id === id);
-    if (word) {
-        word.learned = !word.learned;
-        if (word.learned) { stats.vocabLearnedToday++; word.nextReview = new Date(Date.now() + 24*60*60*1000).toISOString(); }
-        saveToStorage(); renderVocabulary();
+// --- NEW MODULE: UPGRADED GRAMMAR MANAGEMENT (CRUD) ---
+const grammarModal = document.getElementById('grammar-modal');
+const btnAddGrammar = document.getElementById('btn-add-grammar');
+const closeGrammarModal = document.getElementById('close-grammar-modal');
+const grammarForm = document.getElementById('grammar-form');
+const grammarSearch = document.getElementById('grammar-search');
+const grammarFilterHsk = document.getElementById('grammar-filter-hsk');
+const grammarFilterLesson = document.getElementById('grammar-filter-lesson');
+
+if (btnAddGrammar) btnAddGrammar.onclick = () => openGrammarModal();
+if (closeGrammarModal) closeGrammarModal.onclick = () => closeGrammarModalFunc();
+if (grammarSearch) grammarSearch.addEventListener('input', renderGrammar);
+if (grammarFilterHsk) grammarFilterHsk.addEventListener('change', renderGrammar);
+if (grammarFilterLesson) grammarFilterLesson.addEventListener('change', renderGrammar);
+
+function openGrammarModal(id = null) {
+    grammarModal.style.display = 'flex';
+    if (id) {
+        document.getElementById('grammar-modal-title-text').innerText = "Chỉnh sửa cấu trúc Ngữ pháp";
+        const item = grammar.find(g => g.id === id);
+        if (item) {
+            document.getElementById('grammar-id').value = item.id;
+            document.getElementById('grammar-pattern').value = item.pattern;
+            document.getElementById('grammar-pinyin').value = item.pinyin || '';
+            document.getElementById('grammar-meaning').value = item.meaning;
+            document.getElementById('grammar-hsk').value = item.hsk || '';
+            document.getElementById('grammar-lesson').value = item.lesson || '';
+            document.getElementById('grammar-explanation').value = item.explanation || '';
+            document.getElementById('grammar-example').value = item.example || '';
+            document.getElementById('grammar-notes').value = item.notes || '';
+        }
+    } else {
+        document.getElementById('grammar-modal-title-text').innerText = "Thêm cấu trúc ngữ pháp mới";
+        grammarForm.reset();
+        document.getElementById('grammar-id').value = '';
     }
 }
 
-// --- GRAMMAR ---
-function renderGrammar() {
-    const container = document.getElementById('grammar-list');
-    if(!container) return; container.innerHTML = '';
-    grammar.forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'grammar-card';
-        card.innerHTML = `
-            <div class="grammar-title-row">
-                <div class="grammar-pattern">${item.pattern}</div>
-                <button class="action-btn" onclick="toggleBookmarkGrammar(${item.id})">${item.bookmarked ? '🔖' : '📑'}</button>
-            </div>
-            <div class="grammar-explanation">${item.explanation}</div>
-            <div class="grammar-examples">
-                ${item.examples.map(ex => `<div class="example-item"><div class="ex-zh">${ex.zh}</div><div class="ex-py">${ex.py}</div><div class="ex-vi">${ex.vi}</div></div>`).join('')}
-            </div>
-        `;
-        container.appendChild(card);
-    });
+function closeGrammarModalFunc() { grammarModal.style.display = 'none'; }
+
+if (grammarForm) {
+    grammarForm.onsubmit = function(e) {
+        e.preventDefault();
+        const id = document.getElementById('grammar-id').value;
+        const pattern = document.getElementById('grammar-pattern').value.trim();
+        const pinyin = document.getElementById('grammar-pinyin').value.trim();
+        const meaning = document.getElementById('grammar-meaning').value.trim();
+        const hsk = document.getElementById('grammar-hsk').value.trim() || "HSK 1";
+        const lesson = document.getElementById('grammar-lesson').value.trim() || "Chưa rõ";
+        const explanation = document.getElementById('grammar-explanation').value.trim();
+        const example = document.getElementById('grammar-example').value.trim();
+        const notesText = document.getElementById('grammar-notes').value.trim();
+
+        if (id) {
+            const index = grammar.findIndex(g => g.id == id);
+            if (index !== -1) {
+                grammar[index] = { 
+                    ...grammar[index], pattern, pinyin, meaning, hsk, lesson, 
+                    explanation, example, notes: notesText 
+                };
+            }
+        } else {
+            grammar.push({
+                id: Date.now(), pattern, pinyin, meaning, hsk, lesson, 
+                explanation, example, notes: notesText,
+                createdAt: new Date().toISOString()
+            });
+            stats.grammarStudiedToday++;
+        }
+        saveToStorage();
+        closeGrammarModalFunc();
+        renderGrammar();
+    };
 }
 
-window.toggleBookmarkGrammar = function(id) {
-    const item = grammar.find(g => g.id === id);
-    if (item) { item.bookmarked = !item.bookmarked; if (item.bookmarked) stats.grammarStudiedToday++; saveToStorage(); renderGrammar(); }
+window.deleteGrammar = function(id) {
+    if (confirm("Bạn có chắc muốn xóa vĩnh viễn cấu trúc ngữ pháp này?")) {
+        grammar = grammar.filter(g => g.id !== id);
+        saveToStorage();
+        renderGrammar();
+    }
+}
+
+function renderGrammar() {
+    const container = document.getElementById('grammar-list');
+    if (!container) return;
+    container.innerHTML = '';
+    
+    const query = grammarSearch.value.toLowerCase();
+    const hskFilter = grammarFilterHsk.value;
+    const lessonFilter = grammarFilterLesson.value;
+
+    grammar.forEach(item => {
+        // Quét tìm kiếm thông minh trên cả 9 trường dữ liệu của Schema cấu trúc mới
+        const matchAllFields = 
+            item.pattern.toLowerCase().includes(query) ||
+            (item.pinyin && item.pinyin.toLowerCase().includes(query)) ||
+            item.meaning.toLowerCase().includes(query) ||
+            (item.explanation && item.explanation.toLowerCase().includes(query)) ||
+            (item.example && item.example.toLowerCase().includes(query)) ||
+            (item.hsk && item.hsk.toLowerCase().includes(query)) ||
+            (item.lesson && item.lesson.toLowerCase().includes(query)) ||
+            (item.notes && item.notes.toLowerCase().includes(query));
+
+        const matchesHsk = hskFilter === 'all' || item.hsk === hskFilter;
+        const matchesLesson = lessonFilter === 'all' || item.lesson === lessonFilter;
+
+        if (matchAllFields && matchesHsk && matchesLesson) {
+            const card = document.createElement('div');
+            card.className = 'grammar-card';
+            
+            // Format ngày tạo thân thiện người dùng
+            const dateStr = item.createdAt ? new Date(item.createdAt).toLocaleDateString('vi-VN') : 'Không rõ';
+
+            card.innerHTML = `
+                <div class="grammar-title-row">
+                    <div>
+                        <div class="grammar-pattern">${item.pattern}</div>
+                        ${item.pinyin ? `<div class="grammar-pinyin-line">(${item.pinyin})</div>` : ''}
+                    </div>
+                    <div>
+                        <button class="action-btn" onclick="openGrammarModal(${item.id})">✏️</button>
+                        <button class="action-btn" onclick="deleteGrammar(${item.id})">🗑️</button>
+                    </div>
+                </div>
+
+                <div class="grammar-meaning-title">💡 Ý nghĩa: ${item.meaning}</div>
+                
+                ${item.explanation ? `<div class="grammar-explanation">${item.explanation}</div>` : ''}
+                
+                <div class="grammar-meta">
+                    <span class="badge badge-lesson">${item.lesson || 'Bài học'}</span>
+                    <span class="badge badge-hsk">${item.hsk || 'HSK'}</span>
+                </div>
+
+                ${item.example ? `
+                    <div class="grammar-examples">
+                        <div class="ex-zh" style="white-space: pre-line;">${item.example}</div>
+                    </div>
+                ` : ''}
+
+                ${item.notes ? `
+                    <div class="grammar-notes-box">
+                        <strong>📌 Lưu ý:</strong> ${item.notes}
+                    </div>
+                ` : ''}
+
+                <div class="grammar-date">Ngày tạo: ${dateStr}</div>
+            `;
+            container.appendChild(card);
+        }
+    });
 }
 
 // --- SRS FLASHCARDS ---
@@ -375,40 +501,98 @@ function showQuizQuestion() {
     });
 }
 
-// NOTEBOOK IMPLEMENTATION
-const noteModal = document.getElementById('note-modal');
-const noteForm = document.getElementById('note-form');
-if (document.getElementById('btn-add-note')) document.getElementById('btn-add-note').onclick = () => { noteForm.reset(); document.getElementById('note-id').value = ''; noteModal.style.display = 'flex'; };
-if (document.getElementById('close-note-modal')) document.getElementById('close-note-modal').onclick = () => noteModal.style.display = 'none';
-
-if (noteForm) {
-    noteForm.onsubmit = function(e) {
-        e.preventDefault();
-        const id = document.getElementById('note-id').value;
-        const title = document.getElementById('note-title').value;
-        const tags = document.getElementById('note-tags').value.split(',').map(t => t.trim());
-        const content = document.getElementById('note-content').value;
-        if (id) {
-            const idx = notes.findIndex(n => n.id == id);
-            if (idx !== -1) notes[idx] = { ...notes[idx], title, tags, content, date: new Date().toLocaleDateString('vi-VN') };
-        } else {
-            notes.push({ id: Date.now(), title, tags, content, date: new Date().toLocaleDateString('vi-VN') });
-        }
-        saveToStorage(); noteModal.style.display = 'none'; renderNotes();
-    };
-}
-
 function renderNotes() {
     const container = document.getElementById('notes-grid'); if(!container) return; container.innerHTML = '';
     notes.forEach(n => {
         const div = document.createElement('div'); div.className = 'note-card';
-        div.innerHTML = `<div><div class="note-title">${n.title}</div><div class="note-date">${n.date}</div><div class="note-body">${n.content}</div></div>
-                         <div class="note-actions"><button class="note-action-lnk edit-lnk" onclick="editNote(${n.id})">Sửa</button><button class="note-action-lnk del-lnk" onclick="deleteNote(${n.id})">Xóa</button></div>`;
+        div.innerHTML = `<div><div class="note-title">${n.title}</div><div class="note-body">${n.content}</div></div>`;
         container.appendChild(div);
     });
 }
-window.editNote = function(id) { const n = notes.find(x => x.id === id); if(n) { document.getElementById('note-id').value = n.id; document.getElementById('note-title').value = n.title; document.getElementById('note-tags').value = n.tags.join(', '); document.getElementById('note-content').value = n.content; noteModal.style.display = 'flex'; } };
-window.deleteNote = function(id) { if(confirm("Xóa ghi chú?")) { notes = notes.filter(x => x.id !== id); saveToStorage(); renderNotes(); } };
+
+// --- IMPORT / EXPORT CSV CONTROLLER ---
+document.getElementById('btn-export-csv')?.addEventListener('click', exportVocabularyToCSV);
+document.getElementById('btn-import-csv')?.addEventListener('click', importVocabularyFromCSV);
+
+function escapeCSVField(field) {
+    if (field === null || field === undefined) return '';
+    let stringValue = String(field);
+    if (stringValue.includes('"') || stringValue.includes(',') || stringValue.includes('\n') || stringValue.includes('\r')) {
+        return '"' + stringValue.replace(/"/g, '""') + '"';
+    }
+    return stringValue;
+}
+
+function exportVocabularyToCSV() {
+    const headers = ["Hanzi", "Pinyin", "Meaning", "HSK", "Lesson", "POS", "Radical", "Structure", "Example", "Tags", "Notes"];
+    let csvRows = [headers.join(',')];
+
+    vocabulary.forEach(word => {
+        const tagsString = word.tags ? word.tags.join(';') : '';
+        const row = [
+            escapeCSVField(word.hanzi), escapeCSVField(word.pinyin), escapeCSVField(word.meaning),
+            escapeCSVField(word.hsk), escapeCSVField(word.lesson), escapeCSVField(word.pos),
+            escapeCSVField(word.radical), escapeCSVField(word.structure), escapeCSVField(word.example),
+            escapeCSVField(tagsString), escapeCSVField(word.notes)
+        ];
+        csvRows.push(row.join(','));
+    });
+
+    const blob = new Blob(["\uFEFF" + csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `TrungVietHoc_Vocabulary_${new Date().toISOString().slice(0,10)}.csv`);
+    document.body.appendChild(link); link.click(); document.body.removeChild(link);
+}
+
+function parseCSVLine(text) {
+    let p = '', r = []; let q = false;
+    for (let i = 0; i < text.length; i++) {
+        let c = text[i];
+        if (c === '"') { q = !q; }
+        else if (c === ',' && !q) { r.push(p); p = ''; }
+        else { p += c; }
+    }
+    r.push(p);
+    return r.map(f => (f.startsWith('"') && f.endsWith('"') ? f.slice(1, -1) : f).replace(/""/g, '"').trim());
+}
+
+function importVocabularyFromCSV() {
+    const fileInput = document.getElementById('csv-file-input');
+    if (!fileInput?.files?.[0]) { alert("Vui lòng chọn một tệp tin CSV trước!"); return; }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const lines = e.target.result.split(/\r?\n/).filter(line => line.trim().length > 0);
+        if (lines.length <= 1) { alert("File trống!"); return; }
+
+        let importedWords = [];
+        let timestamp = Date.now();
+
+        for (let i = 1; i < lines.length; i++) {
+            const values = parseCSVLine(lines[i]);
+            if (values.length < 3 || !values[0] || !values[1]) continue;
+
+            importedWords.push({
+                id: timestamp + i, hanzi: values[0], pinyin: values[1], meaning: values[2],
+                hsk: values[3] || 'HSK 1', lesson: values[4] || 'Chưa rõ', pos: values[5] || '',
+                radical: values[6] || '', structure: values[7] || '', example: values[8] || '',
+                tags: values[9] ? values[9].split(';').map(t => t.trim()) : [], notes: values[10] || '',
+                learned: false, favorite: false, nextReview: new Date().toISOString(), reviewCount: 0, createdAt: new Date().toISOString()
+            });
+        }
+
+        const mode = document.querySelector('input[name="import-mode"]:checked').value;
+        if (mode === 'overwrite') vocabulary = importedWords;
+        else importedWords.forEach(n => { if (!vocabulary.some(v => v.hanzi === n.hanzi)) vocabulary.push(n); });
+
+        saveToStorage();
+        alert("Xử lý hoàn tất tệp dữ liệu.");
+        navigateTo('vocabulary');
+    };
+    reader.readAsText(fileInput.files[0], 'UTF-8');
+}
 
 // Boot initial state
 updateDashboard();

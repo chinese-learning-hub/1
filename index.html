@@ -23,9 +23,10 @@
             <a href="#" class="nav-item" data-target="flashcards">🎴 Flashcards</a>
             <a href="#" class="nav-item" data-target="quiz">✍️ Trắc nghiệm</a>
             <a href="#" class="nav-item" data-target="notebook">📓 Sổ tay ghi chú</a>
+            <a href="#" class="nav-item" data-target="import-export">🔄 Import/Export</a>
         </nav>
         <div class="sidebar-footer">
-            <p>Dự án cá nhân v2.5</p>
+            <p>Dự án cá nhân v3.5</p>
         </div>
     </aside>
 
@@ -149,7 +150,7 @@
 
                         <div class="form-group">
                             <label for="vocab-example">Câu ví dụ (Example)</label>
-                            <input type="text" id="vocab-example" placeholder="Ví dụ: 我家有一 rescue 猫。">
+                            <input type="text" id="vocab-example" placeholder="Ví dụ: 我家有一只猫。">
                         </div>
 
                         <div class="form-group">
@@ -179,20 +180,91 @@
                             <th>Hành động</th>
                         </tr>
                     </thead>
-                    <tbody id="vocab-list">
-                        </tbody>
+                    <tbody id="vocab-list"></tbody>
                 </table>
             </div>
         </section>
 
         <section id="grammar" class="page-view">
-            <header class="page-header">
-                <h1>Cấu trúc Ngữ pháp</h1>
-                <p>Nắm vững các cấu trúc câu Tiếng Trung cốt lõi.</p>
+            <header class="page-header flex-header">
+                <div>
+                    <h1>Cấu trúc Ngữ pháp</h1>
+                    <p>Quản lý và nắm vững các cấu trúc câu Tiếng Trung cốt lõi.</p>
+                </div>
+                <button class="btn btn-primary" id="btn-add-grammar">+ Thêm cấu trúc mới</button>
             </header>
-            <div class="filter-bar">
-                <input type="text" id="grammar-search" placeholder="Tìm kiếm mẫu ngữ pháp hoặc giải thích...">
+            
+            <div class="filter-bar filter-bar-triple">
+                <input type="text" id="grammar-search" placeholder="Tìm kiếm mẫu ngữ pháp, bính âm, ý nghĩa, ghi chú, ví dụ...">
+                <select id="grammar-filter-hsk">
+                    <option value="all">Tất cả HSK</option>
+                    <option value="HSK 1">HSK 1</option>
+                    <option value="HSK 2">HSK 2</option>
+                    <option value="HSK 3">HSK 3</option>
+                    <option value="HSK 4">HSK 4</option>
+                </select>
+                <select id="grammar-filter-lesson">
+                    <option value="all">Tất cả bài học</option>
+                    <option value="Bài 1">Bài 1</option>
+                    <option value="Bài 2">Bài 2</option>
+                    <option value="Bài 3">Bài 3</option>
+                </select>
             </div>
+
+            <div id="grammar-modal" class="modal">
+                <div class="modal-content modal-large">
+                    <span class="close-modal" id="close-grammar-modal">&times;</span>
+                    <h3 id="grammar-modal-title-text">Thêm ngữ pháp mới</h3>
+                    <form id="grammar-form">
+                        <input type="hidden" id="grammar-id">
+                        
+                        <div class="form-group">
+                            <label for="grammar-pattern">Cấu trúc ngữ pháp (Pattern) *</label>
+                            <input type="text" id="grammar-pattern" required placeholder="Ví dụ: Subject + 是 + Object">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="grammar-pinyin">Bính âm (Pinyin)</label>
+                                <input type="text" id="grammar-pinyin" placeholder="Ví dụ: Shì">
+                            </div>
+                            <div class="form-group">
+                                <label for="grammar-meaning">Ý nghĩa cấu trúc *</label>
+                                <input type="text" id="grammar-meaning" required placeholder="Ví dụ: Là...">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="grammar-hsk">Cấp độ HSK</label>
+                                <input type="text" id="grammar-hsk" placeholder="Ví dụ: HSK 1">
+                            </div>
+                            <div class="form-group">
+                                <label for="grammar-lesson">Bài học (Lesson)</label>
+                                <input type="text" id="grammar-lesson" placeholder="Ví dụ: Bài 1">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="grammar-explanation">Giải thích chi tiết (Explanation)</label>
+                            <textarea id="grammar-explanation" rows="3" placeholder="Cách dùng chi tiết cấu trúc câu..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="grammar-example">Mẫu câu ví dụ (Example) - Viết theo dòng hoặc định dạng cụ thể</label>
+                            <textarea id="grammar-example" rows="3" placeholder="Ví dụ: 我 see 越南人 (Wǒ shì Yuènán rén - Tôi là người Việt Nam)"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="grammar-notes">Lưu ý bổ sung (Notes)</label>
+                            <textarea id="grammar-notes" rows="2" placeholder="Ngoại lệ hoặc mẹo ghi nhớ câu..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-full">Lưu cấu trúc ngữ pháp</button>
+                    </form>
+                </div>
+            </div>
+
             <div id="grammar-list" class="grammar-grid"></div>
         </section>
 
@@ -289,6 +361,39 @@
             </div>
             <div id="notes-grid" class="notes-grid"></div>
         </section>
+
+        <section id="import-export" class="page-view">
+            <header class="page-header">
+                <h1>Sau lưu & Nhập dữ liệu sao lưu CSV</h1>
+                <p>Quản lý tệp dữ liệu lưu trữ từ vựng Tiếng Trung của bạn theo tiêu chuẩn Excel/CSV.</p>
+            </header>
+
+            <div class="io-container">
+                <div class="io-card">
+                    <h3>📤 Xuất tệp dữ liệu (Export)</h3>
+                    <p>Tải toàn bộ từ vựng hiện tại trong hệ thống về máy dưới dạng file `.csv` cấu trúc chuẩn.</p>
+                    <button class="btn btn-accent btn-full" id="btn-export-csv">Tải xuống file CSV</button>
+                </div>
+
+                <div class="io-card">
+                    <h3>📥 Nhập tệp dữ liệu (Import)</h3>
+                    <p>Chọn file `.csv` có chứa đầy đủ các cột tiêu đề chuẩn để thêm hàng loạt từ vựng vào LocalStorage.</p>
+                    <div class="file-dropzone">
+                        <input type="file" id="csv-file-input" accept=".csv">
+                    </div>
+                    <div class="io-options">
+                        <label>
+                            <input type="radio" name="import-mode" value="append" checked> Gộp chung (Thêm tiếp vào danh sách cũ)
+                        </label>
+                        <label>
+                            <input type="radio" name="import-mode" value="overwrite"> Ghi đè hoàn toàn (Xóa danh sách cũ)
+                        </label>
+                    </div>
+                    <button class="btn btn-primary btn-full" id="btn-import-csv">Bắt đầu xử lý Nhập File</button>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <script src="script.js"></script>
