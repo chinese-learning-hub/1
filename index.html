@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Học Tiếng Trung - TrungViệt Học</title>
+    <title>Học Tiếng Trung - TrungViệt Học Pro</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,7 +25,7 @@
             <a href="#" class="nav-item" data-target="notebook">📓 Sổ tay ghi chú</a>
         </nav>
         <div class="sidebar-footer">
-            <p>Dự án cá nhân v1.0</p>
+            <p>Dự án cá nhân v2.0</p>
         </div>
     </aside>
 
@@ -81,12 +81,12 @@
 
         <section id="vocabulary" class="page-view">
             <header class="page-header">
-                <h1>Từ vựng HSK</h1>
-                <p>Danh sách từ vựng cá nhân hóa của bạn.</p>
+                <h1>Từ vựng HSK Nâng Cao</h1>
+                <p>Danh sách quản lý chi tiết từ vựng theo cấu trúc SRS.</p>
             </header>
             
             <div class="filter-bar">
-                <input type="text" id="vocab-search" placeholder="Tìm kiếm bằng chữ Hán, Pinyin, nghĩa...">
+                <input type="text" id="vocab-search" placeholder="Tìm bằng Hán tự, Pinyin, nghĩa, cấu trúc, bộ thủ...">
                 <select id="vocab-filter-lesson">
                     <option value="all">Tất cả bài học</option>
                     <option value="Bài 1">Bài 1</option>
@@ -99,11 +99,11 @@
                 <table class="vocab-table">
                     <thead>
                         <tr>
-                            <th>Chữ Hán</th>
-                            <th>Pinyin</th>
+                            <th>Chữ Hán (Bộ/Cấu trúc)</th>
+                            <th>Pinyin / Từ loại</th>
                             <th>Nghĩa Việt</th>
-                            <th>Bài học</th>
-                            <th>Trạng thái</th>
+                            <th>Bài học / HSK</th>
+                            <th>Lịch ôn kế tiếp (Số lần ôn)</th>
                             <th>Hành động</th>
                         </tr>
                     </thead>
@@ -129,19 +129,21 @@
 
         <section id="flashcards" class="page-view">
             <header class="page-header">
-                <h1>Ôn tập Flashcards</h1>
-                <p>Hệ thống lặp lại ngắt quãng đơn giản giúp nhớ lâu.</p>
+                <h1>Ôn tập Flashcards (SRS)</h1>
+                <p>Thẻ tự động tính toán chu kỳ lặp lại ngắt quãng dựa vào lựa chọn của bạn.</p>
             </header>
 
             <div class="flashcard-wrapper">
                 <div class="card-container" id="flashcard">
                     <div class="card-front">
                         <div id="card-front-text" class="chinese-text">...</div>
+                        <div id="card-front-details" class="card-subtext"></div>
                         <span class="hint-text">Bấm vào để lật thẻ</span>
                     </div>
                     <div class="card-back">
                         <div id="card-back-pinyin" class="pinyin-text">...</div>
                         <div id="card-back-meaning" class="meaning-text">...</div>
+                        <div id="card-back-example" class="card-ex-text">...</div>
                     </div>
                 </div>
 
@@ -152,10 +154,10 @@
                 </div>
 
                 <div class="smr-buttons" id="smr-box" style="display: none;">
-                    <button class="btn smr-btn again" data-score="again">Học lại</button>
-                    <button class="btn smr-btn hard" data-score="hard">Khó</button>
-                    <button class="btn smr-btn good" data-score="good">Tốt</button>
-                    <button class="btn smr-btn easy" data-score="easy">Dễ</button>
+                    <button class="btn smr-btn again" data-score="1">Học lại</button>
+                    <button class="btn smr-btn hard" data-score="2">Khó</button>
+                    <button class="btn smr-btn good" data-score="3">Tốt</button>
+                    <button class="btn smr-btn easy" data-score="4">Dễ</button>
                 </div>
             </div>
         </section>
