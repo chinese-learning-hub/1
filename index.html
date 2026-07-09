@@ -25,7 +25,7 @@
             <a href="#" class="nav-item" data-target="notebook">📓 Sổ tay ghi chú</a>
         </nav>
         <div class="sidebar-footer">
-            <p>Dự án cá nhân v2.0</p>
+            <p>Dự án cá nhân v2.5</p>
         </div>
     </aside>
 
@@ -80,9 +80,12 @@
         </section>
 
         <section id="vocabulary" class="page-view">
-            <header class="page-header">
-                <h1>Từ vựng HSK Nâng Cao</h1>
-                <p>Danh sách quản lý chi tiết từ vựng theo cấu trúc SRS.</p>
+            <header class="page-header flex-header">
+                <div>
+                    <h1>Từ vựng HSK Nâng Cao</h1>
+                    <p>Danh sách quản lý chi tiết từ vựng theo cấu trúc SRS.</p>
+                </div>
+                <button class="btn btn-primary" id="btn-add-vocab">+ Thêm từ mới</button>
             </header>
             
             <div class="filter-bar">
@@ -93,6 +96,66 @@
                     <option value="Bài 2">Bài 2</option>
                     <option value="Bài 3">Bài 3</option>
                 </select>
+            </div>
+
+            <div id="vocab-modal" class="modal">
+                <div class="modal-content modal-large">
+                    <span class="close-modal" id="close-vocab-modal">&times;</span>
+                    <h3 id="vocab-modal-title-text">Thêm từ vựng mới</h3>
+                    <form id="vocab-form">
+                        <input type="hidden" id="vocab-id">
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="v-hanzi">Chữ Hán (Hanzi) *</label>
+                                <input type="text" id="v-hanzi" required placeholder="Ví dụ: 📚">
+                            </div>
+                            <div class="form-group">
+                                <label for="v-pinyin">Phiên âm (Pinyin) *</label>
+                                <input type="text" id="v-pinyin" required placeholder="Ví dụ: xuéxí">
+                            </div>
+                            <div class="form-group">
+                                <label for="v-meaning">Nghĩa tiếng Việt *</label>
+                                <input type="text" id="v-meaning" required placeholder="Ví dụ: Học tập">
+                            </div>
+                            <div class="form-group">
+                                <label for="v-hsk">Cấp độ HSK</label>
+                                <input type="text" id="v-hsk" placeholder="Ví dụ: HSK 1">
+                            </div>
+                            <div class="form-group">
+                                <label for="v-lesson">Bài học (Lesson)</label>
+                                <input type="text" id="v-lesson" placeholder="Ví dụ: Bài 1">
+                            </div>
+                            <div class="form-group">
+                                <label for="v-pos">Từ loại (POS)</label>
+                                <input type="text" id="v-pos" placeholder="Ví dụ: Động từ">
+                            </div>
+                            <div class="form-group">
+                                <label for="v-radical">Bộ thủ (Radical)</label>
+                                <input type="text" id="v-radical" placeholder="Ví dụ: 子 (Tử)">
+                            </div>
+                            <div class="form-group">
+                                <label for="v-structure">Cấu trúc chữ (Structure)</label>
+                                <input type="text" id="v-structure" placeholder="Ví dụ: Trên dưới">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="v-example">Câu ví dụ (Example)</label>
+                            <input type="text" id="v-example" placeholder="Ví dụ: 我学习汉语。">
+                        </div>
+                        <div class="form-group">
+                            <label for="v-tags">Thẻ phân tách bằng dấu phẩy (Tags)</label>
+                            <input type="text" id="v-tags" placeholder="Ví dụ: dongtu, canthiet">
+                        </div>
+                        <div class="form-group">
+                            <label for="v-notes">Ghi chú thêm (Notes)</label>
+                            <textarea id="v-notes" rows="3" placeholder="Mẹo nhớ chữ, biến điệu..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-full">Lưu từ vựng</button>
+                    </form>
+                </div>
             </div>
 
             <div class="vocab-table-container">
