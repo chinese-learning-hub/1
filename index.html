@@ -3,398 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Học Tiếng Trung - TrungViệt Học Pro</title>
+    <title>Quản Lý Ngữ Pháp</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="container">
+        <h1>Quản Lý Ngữ Pháp</h1>
 
-    <aside class="sidebar">
-        <div class="logo">
-            <span class="logo-icon">🇨🇳</span>
-            <h2>TrungViệt Học</h2>
+        <!-- Form Thêm / Sửa -->
+        <div class="card">
+            <h2 id="formTitle">Thêm Cấu Trúc Mới</h2>
+            <form id="grammarForm">
+                <input type="hidden" id="entryId">
+                <div class="form-group">
+                    <label for="lessonInput">Bài học (Lesson):</label>
+                    <input type="text" id="lessonInput" placeholder="Ví dụ: Lesson 1, Bài 2..." required>
+                </div>
+                <div class="form-group">
+                    <label for="grammarInput">Cấu trúc ngữ pháp:</label>
+                    <input type="text" id="grammarInput" placeholder="Ví dụ: A 比 B + Adj" required>
+                </div>
+                <div class="form-group">
+                    <label for="meaningInput">Ý nghĩa / Cách dùng:</label>
+                    <textarea id="meaningInput" rows="3" placeholder="Giải thích ý nghĩa..." required></textarea>
+                </div>
+                <div class="form-buttons">
+                    <button type="submit" id="submitBtn" class="btn btn-primary">Lưu Lại</button>
+                    <button type="button" id="cancelBtn" class="btn btn-secondary hidden">Hủy</button>
+                </div>
+            </form>
         </div>
-        <nav class="nav-menu">
-            <a href="#" class="nav-item active" data-target="dashboard">📊 Tổng quan</a>
-            <a href="#" class="nav-item" data-target="vocabulary">📚 Từ vựng (HSK)</a>
-            <a href="#" class="nav-item" data-target="grammar">📝 Ngữ pháp</a>
-            <a href="#" class="nav-item" data-target="flashcards">🎴 Flashcards</a>
-            <a href="#" class="nav-item" data-target="quiz">✍️ Trắc nghiệm</a>
-            <a href="#" class="nav-item" data-target="notebook">📓 Sổ tay ghi chú</a>
-            <a href="#" class="nav-item" data-target="import-export">🔄 Import/Export</a>
-        </nav>
-        <div class="sidebar-footer">
-            <p>Dự án cá nhân v3.5</p>
+
+        <!-- Bộ Lọc & Tìm Kiếm -->
+        <div class="filter-section">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Tìm kiếm cấu trúc hoặc ý nghĩa...">
+            </div>
+            <div class="filter-box">
+                <!-- Dropdown bài học tự động cập nhật động ở đây -->
+                <select id="lessonFilter">
+                    <option value="">Tất cả bài học</option>
+                </select>
+            </div>
         </div>
-    </aside>
 
-    <main class="main-content">
-        
-        <section id="dashboard" class="page-view active">
-            <header class="page-header">
-                <h1>Chào mừng bạn trở lại! 👋</h1>
-                <p>Hôm nay bạn muốn học gì nào?</p>
-            </header>
-            
-            <div class="streak-banner">
-                <div class="streak-info">
-                    <span class="streak-fire">🔥</span>
-                    <div>
-                        <h3>Chuỗi học tập: <span id="streak-count">0</span> ngày</h3>
-                        <p id="streak-msg">Hãy duy trì ngọn lửa học tập mỗi ngày nhé!</p>
-                    </div>
-                </div>
+        <!-- Công cụ Import / Export -->
+        <div class="tools-section">
+            <button id="exportBtn" class="btn btn-success">Xuất bản (Export JSON)</button>
+            <label for="importFile" class="btn btn-info">Nhập bản lưu (Import JSON)</label>
+            <input type="file" id="importFile" accept=".json" style="display: none;">
+        </div>
+
+        <!-- Danh Sách Hiển Thị -->
+        <div class="list-section">
+            <h2>Danh Sách Ngữ Pháp</h2>
+            <div id="grammarList" class="grammar-list">
+                <!-- Data đổ vào đây từ script -->
             </div>
-
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <span class="stat-icon blue">🇨🇳</span>
-                    <div class="stat-details">
-                        <h4 id="stat-vocab-today">0</h4>
-                        <p>Từ vựng đã học hôm nay</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-icon purple">🎴</span>
-                    <div class="stat-details">
-                        <h4 id="stat-cards-today">0</h4>
-                        <p>Thẻ flashcard đã ôn</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-icon green">📝</span>
-                    <div class="stat-details">
-                        <h4 id="stat-grammar-today">0</h4>
-                        <p>Ngữ pháp đã đọc</p>
-                    </div>
-                </div>
-            </div>
-
-            <h3 class="section-title">Truy cập nhanh</h3>
-            <div class="quick-access">
-                <button class="btn btn-primary" onclick="navigateTo('vocabulary')">Học Từ Mới</button>
-                <button class="btn btn-secondary" onclick="navigateTo('flashcards')">Ôn Flashcards</button>
-                <button class="btn btn-accent" onclick="navigateTo('quiz')">Làm Kiểm Tra</button>
-            </div>
-        </section>
-
-        <section id="vocabulary" class="page-view">
-            <header class="page-header flex-header">
-                <div>
-                    <h1>Từ vựng HSK Nâng Cao</h1>
-                    <p>Danh sách quản lý chi tiết từ vựng theo cấu trúc SRS.</p>
-                </div>
-                <button class="btn btn-primary" id="btn-add-vocab">+ Thêm từ mới</button>
-            </header>
-            
-            <div class="filter-bar">
-                <input type="text" id="vocab-search" placeholder="Tìm kiếm toàn bộ các trường (Hán tự, Bộ thủ, Tag, Ví dụ, Ghi chú...)">
-                <select id="vocab-filter-lesson">
-                    <option value="all">Tất cả bài học</option>
-                    <option value="Bài 1">Bài 1</option>
-                    <option value="Bài 2">Bài 2</option>
-                    <option value="Bài 3">Bài 3</option>
-                </select>
-            </div>
-
-            <div id="vocab-modal" class="modal">
-                <div class="modal-content modal-large">
-                    <span class="close-modal" id="close-vocab-modal">&times;</span>
-                    <h3 id="vocab-modal-title-text">Thêm từ vựng mới</h3>
-                    <form id="vocab-form">
-                        <input type="hidden" id="vocab-id">
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="vocab-hanzi">Chữ Hán (Hanzi) *</label>
-                                <input type="text" id="vocab-hanzi" required placeholder="Ví dụ: 猫">
-                            </div>
-                            <div class="form-group">
-                                <label for="vocab-pinyin">Bính âm (Pinyin) *</label>
-                                <input type="text" id="vocab-pinyin" required placeholder="Ví dụ: māo">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="vocab-meaning">Ý nghĩa (Tiếng Việt) *</label>
-                            <input type="text" id="vocab-meaning" required placeholder="Ví dụ: Con mèo">
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="vocab-hsk">Cấp độ HSK</label>
-                                <input type="text" id="vocab-hsk" placeholder="Ví dụ: HSK 1">
-                            </div>
-                            <div class="form-group">
-                                <label for="vocab-lesson">Bài học (Lesson)</label>
-                                <input type="text" id="vocab-lesson" placeholder="Ví dụ: Bài 3">
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="vocab-pos">Từ loại (POS)</label>
-                                <input type="text" id="vocab-pos" placeholder="Ví dụ: Danh từ">
-                            </div>
-                            <div class="form-group">
-                                <label for="vocab-radical">Bộ thủ (Radical)</label>
-                                <input type="text" id="vocab-radical" placeholder="Ví dụ: 犭 (Khuyển)">
-                            </div>
-                            <div class="form-group">
-                                <label for="vocab-structure">Cấu trúc chữ</label>
-                                <input type="text" id="vocab-structure" placeholder="Ví dụ: Tả hữu">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="vocab-example">Câu ví dụ (Example)</label>
-                            <input type="text" id="vocab-example" placeholder="Ví dụ: 我家有一只猫。">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="vocab-tags">Thẻ / Tags (cách nhau bằng dấu phẩy)</label>
-                            <input type="text" id="vocab-tags" placeholder="dongvat, thucung, hsk1">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="vocab-notes">Ghi chú thêm (Notes)</label>
-                            <textarea id="vocab-notes" rows="3" placeholder="Mẹo nhớ hoặc cách dùng đặc biệt..."></textarea>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary btn-full">Lưu từ vựng</button>
-                    </form>
-                </div>
-            </div>
-
-            <div class="vocab-table-container">
-                <table class="vocab-table">
-                    <thead>
-                        <tr>
-                            <th>Chữ Hán (Bộ/Cấu trúc)</th>
-                            <th>Pinyin / Từ loại</th>
-                            <th>Nghĩa Việt / Thẻ</th>
-                            <th>Bài học / HSK</th>
-                            <th>Lịch ôn kế tiếp (Số lần ôn)</th>
-                            <th>Hành động</th>
-                        </tr>
-                    </thead>
-                    <tbody id="vocab-list"></tbody>
-                </table>
-            </div>
-        </section>
-
-        <section id="grammar" class="page-view">
-            <header class="page-header flex-header">
-                <div>
-                    <h1>Cấu trúc Ngữ pháp</h1>
-                    <p>Quản lý và nắm vững các cấu trúc câu Tiếng Trung cốt lõi.</p>
-                </div>
-                <button class="btn btn-primary" id="btn-add-grammar">+ Thêm cấu trúc mới</button>
-            </header>
-            
-            <div class="filter-bar filter-bar-triple">
-                <input type="text" id="grammar-search" placeholder="Tìm kiếm mẫu ngữ pháp, bính âm, ý nghĩa, ghi chú, ví dụ...">
-                <select id="grammar-filter-hsk">
-                    <option value="all">Tất cả HSK</option>
-                    <option value="HSK 1">HSK 1</option>
-                    <option value="HSK 2">HSK 2</option>
-                    <option value="HSK 3">HSK 3</option>
-                    <option value="HSK 4">HSK 4</option>
-                </select>
-                <select id="grammar-filter-lesson">
-                    <option value="all">Tất cả bài học</option>
-                    <option value="Bài 1">Bài 1</option>
-                    <option value="Bài 2">Bài 2</option>
-                    <option value="Bài 3">Bài 3</option>
-                </select>
-            </div>
-
-            <div id="grammar-modal" class="modal">
-                <div class="modal-content modal-large">
-                    <span class="close-modal" id="close-grammar-modal">&times;</span>
-                    <h3 id="grammar-modal-title-text">Thêm ngữ pháp mới</h3>
-                    <form id="grammar-form">
-                        <input type="hidden" id="grammar-id">
-                        
-                        <div class="form-group">
-                            <label for="grammar-pattern">Cấu trúc ngữ pháp (Pattern) *</label>
-                            <input type="text" id="grammar-pattern" required placeholder="Ví dụ: Subject + 是 + Object">
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="grammar-pinyin">Bính âm (Pinyin)</label>
-                                <input type="text" id="grammar-pinyin" placeholder="Ví dụ: Shì">
-                            </div>
-                            <div class="form-group">
-                                <label for="grammar-meaning">Ý nghĩa cấu trúc *</label>
-                                <input type="text" id="grammar-meaning" required placeholder="Ví dụ: Là...">
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="grammar-hsk">Cấp độ HSK</label>
-                                <input type="text" id="grammar-hsk" placeholder="Ví dụ: HSK 1">
-                            </div>
-                            <div class="form-group">
-                                <label for="grammar-lesson">Bài học (Lesson)</label>
-                                <input type="text" id="grammar-lesson" placeholder="Ví dụ: Bài 1">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="grammar-explanation">Giải thích chi tiết (Explanation)</label>
-                            <textarea id="grammar-explanation" rows="3" placeholder="Cách dùng chi tiết cấu trúc câu..."></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="grammar-example">Mẫu câu ví dụ (Example) - Viết theo dòng hoặc định dạng cụ thể</label>
-                            <textarea id="grammar-example" rows="3" placeholder="Ví dụ: 我 see 越南人 (Wǒ shì Yuènán rén - Tôi là người Việt Nam)"></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="grammar-notes">Lưu ý bổ sung (Notes)</label>
-                            <textarea id="grammar-notes" rows="2" placeholder="Ngoại lệ hoặc mẹo ghi nhớ câu..."></textarea>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary btn-full">Lưu cấu trúc ngữ pháp</button>
-                    </form>
-                </div>
-            </div>
-
-            <div id="grammar-list" class="grammar-grid"></div>
-        </section>
-
-        <section id="flashcards" class="page-view">
-            <header class="page-header">
-                <h1>Ôn tập Flashcards (SRS)</h1>
-                <p>Thẻ tự động tính toán chu kỳ lặp lại ngắt quãng dựa vào lựa chọn của bạn.</p>
-            </header>
-
-            <div class="flashcard-wrapper">
-                <div class="card-container" id="flashcard">
-                    <div class="card-front">
-                        <div id="card-front-text" class="chinese-text">...</div>
-                        <div id="card-front-details" class="card-subtext"></div>
-                        <span class="hint-text">Bấm vào để lật thẻ</span>
-                    </div>
-                    <div class="card-back">
-                        <div id="card-back-pinyin" class="pinyin-text">...</div>
-                        <div id="card-back-meaning" class="meaning-text">...</div>
-                        <div id="card-back-example" class="card-ex-text">...</div>
-                    </div>
-                </div>
-
-                <div class="card-controls">
-                    <button class="btn btn-secondary" id="btn-prev">⬅️ Trước</button>
-                    <button class="btn btn-secondary" id="btn-shuffle">🔀 Trộn thẻ</button>
-                    <button class="btn btn-secondary" id="btn-next">Sau ➡️</button>
-                </div>
-
-                <div class="smr-buttons" id="smr-box" style="display: none;">
-                    <button class="btn smr-btn again" data-score="1">Học lại</button>
-                    <button class="btn smr-btn hard" data-score="2">Khó</button>
-                    <button class="btn smr-btn good" data-score="3">Tốt</button>
-                    <button class="btn smr-btn easy" data-score="4">Dễ</button>
-                </div>
-            </div>
-        </section>
-
-        <section id="quiz" class="page-view">
-            <header class="page-header">
-                <h1>Trắc nghiệm Đánh giá</h1>
-                <p>Kiểm tra ngẫu nhiên vốn từ vựng HSK của bạn.</p>
-            </header>
-            <div id="quiz-start-screen" class="quiz-box text-center">
-                <h3>Sẵn sàng kiểm tra chưa?</h3>
-                <p>Hệ thống sẽ tạo 5 câu hỏi ngẫu nhiên dựa trên bộ từ vựng hiện có.</p>
-                <button class="btn btn-primary" id="btn-start-quiz">Bắt đầu kiểm tra</button>
-            </div>
-            <div id="quiz-play-screen" class="quiz-box" style="display: none;">
-                <div class="quiz-progress">Câu hỏi <span id="quiz-current">1</span>/5</div>
-                <div class="quiz-question" id="quiz-question-text">Câu hỏi ở đây</div>
-                <div class="quiz-options" id="quiz-options-container"></div>
-            </div>
-            <div id="quiz-result-screen" class="quiz-box text-center" style="display: none;">
-                <h2>Kết quả của bạn 🎉</h2>
-                <div class="quiz-score" id="quiz-score-text">0 / 0</div>
-                <button class="btn btn-primary" id="btn-restart-quiz">Làm lại bài mới</button>
-            </div>
-        </section>
-
-        <section id="notebook" class="page-view">
-            <header class="page-header flex-header">
-                <div>
-                    <h1>Sổ tay Ghi chú</h1>
-                    <p>Lưu trữ mẹo học tập, nhật ký, hoặc lưu ý riêng của bạn.</p>
-                </div>
-                <button class="btn btn-primary" id="btn-add-note">+ Thêm ghi chú</button>
-            </header>
-            <div class="filter-bar">
-                <input type="text" id="note-search" placeholder="Tìm kiếm tiêu đề, nội dung hoặc thẻ...">
-            </div>
-
-            <div id="note-modal" class="modal">
-                <div class="modal-content">
-                    <span class="close-modal" id="close-note-modal">&times;</span>
-                    <h3 id="modal-title-text">Thêm ghi chú mới</h3>
-                    <form id="note-form">
-                        <input type="hidden" id="note-id">
-                        <div class="form-group">
-                            <label for="note-title">Tiêu đề</label>
-                            <input type="text" id="note-title" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="note-tags">Thẻ (phân cách bằng dấu phẩy)</label>
-                            <input type="text" id="note-tags">
-                        </div>
-                        <div class="form-group">
-                            <label for="note-content">Nội dung</label>
-                            <textarea id="note-content" rows="6" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Lưu ghi chú</button>
-                    </form>
-                </div>
-            </div>
-            <div id="notes-grid" class="notes-grid"></div>
-        </section>
-
-        <section id="import-export" class="page-view">
-            <header class="page-header">
-                <h1>Sau lưu & Nhập dữ liệu sao lưu CSV</h1>
-                <p>Quản lý tệp dữ liệu lưu trữ từ vựng Tiếng Trung của bạn theo tiêu chuẩn Excel/CSV.</p>
-            </header>
-
-            <div class="io-container">
-                <div class="io-card">
-                    <h3>📤 Xuất tệp dữ liệu (Export)</h3>
-                    <p>Tải toàn bộ từ vựng hiện tại trong hệ thống về máy dưới dạng file `.csv` cấu trúc chuẩn.</p>
-                    <button class="btn btn-accent btn-full" id="btn-export-csv">Tải xuống file CSV</button>
-                </div>
-
-                <div class="io-card">
-                    <h3>📥 Nhập tệp dữ liệu (Import)</h3>
-                    <p>Chọn file `.csv` có chứa đầy đủ các cột tiêu đề chuẩn để thêm hàng loạt từ vựng vào LocalStorage.</p>
-                    <div class="file-dropzone">
-                        <input type="file" id="csv-file-input" accept=".csv">
-                    </div>
-                    <div class="io-options">
-                        <label>
-                            <input type="radio" name="import-mode" value="append" checked> Gộp chung (Thêm tiếp vào danh sách cũ)
-                        </label>
-                        <label>
-                            <input type="radio" name="import-mode" value="overwrite"> Ghi đè hoàn toàn (Xóa danh sách cũ)
-                        </label>
-                    </div>
-                    <button class="btn btn-primary btn-full" id="btn-import-csv">Bắt đầu xử lý Nhập File</button>
-                </div>
-            </div>
-        </section>
-
-    </main>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
